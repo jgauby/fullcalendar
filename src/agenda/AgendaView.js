@@ -527,40 +527,51 @@ function AgendaView(element, calendar, viewName) {
 		var html = '';
 		for (var i=0; i < annotations.length; i++) {
 			var ann = annotations[i];
-			if (ann.start >= this.start && ann.end <= this.end) {
-				var top = timePosition(ann.start, ann.start);
-				var bottom = timePosition(ann.end, ann.end);
-				var height = bottom - top;
-				var dayIndex = dayDiff(ann.start, t.visStart);
-				
-				var left = colContentLeft(dayIndex) - 2;
-				var right = colContentRight(dayIndex) + 3;
-				var width = right - left;
 
-				var cls = '';
-				if (ann.cls) {
-					cls = ' ' + ann.cls;
-				}
-
-				var colors = '';
-				if (ann.color) {
-					colors = 'color:' + ann.color + ';';
-				}
-				if (ann.background) {
-					colors += 'background:' + ann.background + ';';
-				}
-
-				var body = ann.title || '';
-
-				html += '<div style="position: absolute; ' + 
-					'top: ' + top + 'px; ' + 
-					'left: ' + left + 'px; ' +
-					'width: ' + width + 'px; ' +
-					'height: ' + height + 'px;' + colors + '" ' + 
-					'class="fc-annotation fc-annotation-skin' + cls + '">' + 
-					body + 
-					'</div>';
+			if(t instanceof AgendaWeekView) {
+				var dayIndex = ((ann.start.getDay()+6)%7) - ((t.visStart.getDay()+6)%7);
 			}
+			else if(t instanceof AgendaDayView) {
+				if(ann.start.getDay() != t.visStart.getDay()) {
+					continue;
+				}
+				var dayIndex = 0;
+			}
+			else {
+				return;
+			}
+
+			var top = timePosition(ann.start, ann.start);
+			var bottom = timePosition(ann.end, ann.end);
+			var height = bottom - top;
+
+			var left = colContentLeft(dayIndex) - 2;
+			var right = colContentRight(dayIndex) + 3;
+			var width = right - left;
+
+			var cls = '';
+			if (ann.cls) {
+				cls = ' ' + ann.cls;
+			}
+
+			var colors = '';
+			if (ann.color) {
+				colors = 'color:' + ann.color + ';';
+			}
+			if (ann.background) {
+				colors += 'background:' + ann.background + ';';
+			}
+
+			var body = ann.title || '';
+
+			html += '<div style="position: absolute; ' + 
+				'top: ' + top + 'px; ' + 
+				'left: ' + left + 'px; ' +
+				'width: ' + width + 'px; ' +
+				'height: ' + height + 'px;' + colors + '" ' + 
+				'class="fc-annotation fc-annotation-skin' + cls + '">' + 
+				body + 
+				'</div>';
 		}
 		annotationSegmentContainer[0].innerHTML = html;				
 	}

@@ -248,6 +248,7 @@ function Calendar(element, options, eventSources) {
 			unselect();
 			currentView.clearEvents();
 			currentView.renderEvents(events);
+			currentView.renderAnnotations(annotations);
 			currentView.sizeDirty = false;
 		}
 	}
