@@ -357,25 +357,6 @@ function Calendar(element, options, eventSources) {
 		});
 	}
 	
-	function updateBusiness() {
-		$(_element).find('.fc-agenda-slots tr').removeClass('fc-non-business-hours');
-		var d = zeroDate();
-		var maxMinute = parseTime(options.maxTime);
-		var minMinute = parseTime(options.minTime);
-		var maxd = addMinutes(cloneDate(d), maxMinute);
-		addMinutes(d, minMinute);
-		var startOfBusiness = options.startOfBusiness * (60/options.slotMinutes);
-		var endOfBusiness = (options.endOfBusiness + (options.slotMinutes/60)) * (60/options.slotMinutes);
-		for (var i=0; d < maxd; i++) {
-			var minutes = d.getMinutes();
-			if(i < startOfBusiness || i > endOfBusiness) {
-				$(_element).find('.fc-agenda-slots tr.fc-slot' + i).addClass('fc-non-business-hours');
-			}
-			addMinutes(d, options.slotMinutes);
-		}
-	}
-
-	
 
 
 	/* Selection
@@ -473,10 +454,6 @@ function Calendar(element, options, eventSources) {
 		if (name == 'height' || name == 'contentHeight' || name == 'aspectRatio') {
 			options[name] = value;
 			updateSize();
-		}
-		else if(name == 'startOfBusiness' || name == 'endOfBusiness') {
-			options[name] = value;
-			updateBusiness();
 		}
 	}
 	
