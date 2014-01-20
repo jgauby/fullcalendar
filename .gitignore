@@ -7,5 +7,7 @@ dist
 # npm modules
 node_modules
 
+.idea/
+
 # bower components
 lib/*/*
