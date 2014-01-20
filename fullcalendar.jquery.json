@@ -13,7 +13,7 @@
   "description": "Full-sized drag & drop event calendar",
   "keywords": [ "calendar", "event", "full-sized" ],
 
-  "homepage": "http://arshaw.com/fullcalendar/",
+  "homepage": "https://github.com/jgauby/fullcalendar",
   "demo": "http://arshaw.com/fullcalendar/",
   "docs": "http://arshaw.com/fullcalendar/docs/",
   "download": "http://arshaw.com/fullcalendar/download/",
