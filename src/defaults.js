@@ -71,7 +71,9 @@ var defaults = {
 	unselectAuto: true,
 	
 	dropAccept: '*',
-	
+
+	annotations: [],
+
 	handleWindowResize: true
 	
 };
