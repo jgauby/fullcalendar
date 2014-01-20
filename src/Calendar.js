@@ -305,7 +305,6 @@ function Calendar(element, options, eventSources) {
 	function rerenderEvents(modifiedEventID) { // can be called as an API method
 		clearEvents();
 		renderEvents(modifiedEventID);
-		currentView.renderAnnotations(annotations);
 	}
 
 
@@ -313,6 +312,7 @@ function Calendar(element, options, eventSources) {
 		if (elementVisible()) {
 			currentView.setEventData(events); // for View.js, TODO: unify with renderEvents
 			currentView.renderEvents(events, modifiedEventID); // actually render the DOM elements
+			currentView.renderAnnotations(annotations);
 			currentView.trigger('eventAfterAllRender');
 		}
 	}
