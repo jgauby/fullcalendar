@@ -683,6 +683,38 @@ function AgendaView(element, calendar, viewName) {
 				body +
 				'</div>';
 		}
+
+		// add highlight today
+		var cur_time = new Date();
+		if ((t instanceof AgendaWeekView || t instanceof AgendaDayView) &&
+			annotations.length > 0 &&
+			t.visStart < cur_time && t.visEnd > cur_time && !t.isHiddenDay(cur_time)) {
+
+			var $fc_today = $('.fc-state-highlight.fc-today');
+			$fc_today.removeClass('fc-state-highlight').prepend(
+				'<div style="position: absolute;' +
+					' width: ' + $fc_today.width() + 'px; height: ' +
+					$('.fc-agenda-allday').height() + 'px;' +
+					'" class="fc-state-highlight"></div>'
+			);
+
+			if(t instanceof AgendaWeekView) {
+				var left = colContentLeft(dayIndexes[cur_time.getDay()]) - 2;
+				var right = colContentRight(dayIndexes[cur_time.getDay()]) + 3;
+			}
+			else {
+				var left = colContentLeft(0) - 2;
+				var right = colContentRight(0) + 3
+			}
+			var width = right - left;
+			html += '<div style="position: absolute; opacity: 0.5; filter: alpha(opacity=50);' +
+				'top: 0px; ' +
+				'left: ' + left + 'px; ' +
+				'width: ' + width + 'px; ' +
+				'height: ' + slotTable.height() + 'px;' + '" ' +
+				'class="fc-state-highlight"></div>';
+		}
+
 		annotationSegmentContainer[0].innerHTML = html;
 	}
 	
