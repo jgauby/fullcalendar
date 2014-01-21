@@ -297,7 +297,6 @@ function Calendar(element, options, eventSources) {
 
 
 	function refetchEvents() { // can be called as an API method
-		clearEvents();
 		fetchAndRenderEvents();
 	}
 
