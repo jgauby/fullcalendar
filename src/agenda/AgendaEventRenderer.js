@@ -236,7 +236,7 @@ function AgendaEventRenderer() {
 			// make sure horizontal coordinates are in bounds
 			left = Math.max(left, columnLeft);
 			right = Math.min(right, columnRight);
-			width = right - left;
+			width = right - left - 1;
 
 			seg.top = top;
 			seg.left = left;
