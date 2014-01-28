@@ -247,12 +247,16 @@ a.fc-event,
 
 .fc-annotation-skin {
 	border-color: #999;     /* default BORDER color */
-	background-color: #edb; /* default BACKGROUND color */
+	background-color: #efefef; /* default BACKGROUND color */
 	color: #777;            /* default TEXT color */
 	text-align: center;
 	opacity: 0.8;
 	filter: alpha(opacity=80); /* for IE */
 	}
+
+.fc-annotation-today {
+    background-color: #d6dce6;
+}
 
 
 /* Reusable Separate-border Table

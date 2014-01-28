@@ -621,6 +621,7 @@ function AgendaView(element, calendar, viewName) {
 	-----------------------------------------------------------------------------*/
 	function renderAnnotations(annotations) {
 		var html = '';
+		var today = new Date().setHours(0,0,0,0);
 
 		if(annotations.length > 0 && t instanceof AgendaWeekView) {
 			var dayIndexes = {};
@@ -656,11 +657,15 @@ function AgendaView(element, calendar, viewName) {
 
 			var left = colContentLeft(dayIndex) - 2;
 			var right = colContentRight(dayIndex) + 3;
-			var width = right - left;
+			var width = right - left - 1;
 
 			var cls = '';
 			if (ann.cls) {
 				cls = ' ' + ann.cls;
+			}
+
+			if(today >= t.visStart && today < t.visEnd && today == new Date(ann.start).setHours(0,0,0,0)) {
+				cls += ' fc-annotation-today';
 			}
 
 			var colors = '';
@@ -681,37 +686,6 @@ function AgendaView(element, calendar, viewName) {
 				'class="fc-annotation fc-annotation-skin' + cls + '">' +
 				body +
 				'</div>';
-		}
-
-		// add highlight today
-		var cur_time = new Date();
-		if ((t instanceof AgendaWeekView || t instanceof AgendaDayView) &&
-			annotations.length > 0 &&
-			t.visStart < cur_time && t.visEnd > cur_time && !t.isHiddenDay(cur_time)) {
-
-			var $fc_today = $('.fc-state-highlight.fc-today');
-			$fc_today.removeClass('fc-state-highlight').prepend(
-				'<div style="position: absolute;' +
-					' width: ' + $fc_today.width() + 'px; height: ' +
-					$('.fc-agenda-allday').height() + 'px;' +
-					'" class="fc-state-highlight"></div>'
-			);
-
-			if(t instanceof AgendaWeekView) {
-				var left = colContentLeft(dayIndexes[cur_time.getDay()]) - 2;
-				var right = colContentRight(dayIndexes[cur_time.getDay()]) + 3;
-			}
-			else {
-				var left = colContentLeft(0) - 2;
-				var right = colContentRight(0) + 3
-			}
-			var width = right - left;
-			html += '<div style="position: absolute; opacity: 0.5; filter: alpha(opacity=50);' +
-				'top: 0px; ' +
-				'left: ' + left + 'px; ' +
-				'width: ' + width + 'px; ' +
-				'height: ' + slotTable.height() + 'px;' + '" ' +
-				'class="fc-state-highlight"></div>';
 		}
 
 		annotationSegmentContainer[0].innerHTML = html;
