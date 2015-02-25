@@ -307,6 +307,7 @@ function View(element, calendar, viewName) {
 	t.cellOffsetToDayOffset = cellOffsetToDayOffset;
 	t.dayOffsetToDate = dayOffsetToDate;
 	t.rangeToSegments = rangeToSegments;
+	t.resourceToSegments = resourceToSegments;
 
 
 	// internals
@@ -535,6 +536,67 @@ function View(element, calendar, viewName) {
 
 		return segments;
 	}
-	
+
+
+	function resourceToSegments(resourceId, startDate, endDate) {
+		var rowCnt = t.getRowCnt();
+		var colCnt = t.getColCnt();
+		var segments = []; // array of segments to return
+
+		// day offset for given date range
+		var rangeDayOffsetStart = dateToDayOffset(startDate);
+		var rangeDayOffsetEnd = dateToDayOffset(endDate); // exclusive
+
+		// first and last cell offset for the given date range
+		// "last" implies inclusivity
+		var rangeCellOffsetFirst = dayOffsetToCellOffset(rangeDayOffsetStart);
+		var rangeCellOffsetLast = dayOffsetToCellOffset(rangeDayOffsetEnd) - 1;
+
+		// loop through all the rows in the view
+		for (var row=0; row<rowCnt; row++) {
+
+			// first and last cell offset for the row
+			var rowCellOffsetFirst = row;
+			var rowCellOffsetLast = rowCellOffsetFirst;
+
+			// get the segment's cell offsets by constraining the range's cell offsets to the bounds of the row
+			var segmentCellOffsetFirst = Math.max(rangeCellOffsetFirst, rowCellOffsetFirst);
+			var segmentCellOffsetLast = Math.min(rangeCellOffsetLast, rowCellOffsetLast);
+
+			// make sure segment's offsets are valid and in view
+			if (segmentCellOffsetFirst <= segmentCellOffsetLast) {
+
+				// translate to cells
+				for (var col=0; col<colCnt; col++) {
+					resource = opt('resources')[col];
+					if(resourceId == resource.id) {
+						var segmentCellFirst = {row: 0, col: col};
+						var segmentCellLast = {row: 0, col: col};
+						break;
+					}
+				}
+
+				// view might be RTL, so order by leftmost column
+				var cols = [ segmentCellFirst.col, segmentCellLast.col ].sort();
+
+				// Determine if segment's first/last cell is the beginning/end of the date range.
+				// We need to compare "day offset" because "cell offsets" are often ambiguous and
+				// can translate to multiple days, and an edge case reveals itself when we the
+				// range's first cell is hidden (we don't want isStart to be true).
+				var isStart = cellOffsetToDayOffset(segmentCellOffsetFirst) == rangeDayOffsetStart;
+				var isEnd = cellOffsetToDayOffset(segmentCellOffsetLast) + 1 == rangeDayOffsetEnd; // +1 for comparing exclusively
+
+				segments.push({
+					row: row,
+					leftCol: cols[0],
+					rightCol: cols[1],
+					isStart: isStart,
+					isEnd: isEnd
+				});
+			}
+		}
+
+		return segments;
+	}
 
 }

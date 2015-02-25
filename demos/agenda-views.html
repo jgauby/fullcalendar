@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link href='../build/out/fullcalendar.css' rel='stylesheet' />
-<link href='../build/out/fullcalendar.print.css' rel='stylesheet' media='print' />
-<script src='../lib/jquery/jquery.js'></script>
-<script src='../lib/jquery-ui/ui/jquery-ui.js'></script>
-<script src='../build/out/fullcalendar.js'></script>
+<link href='../fullcalendar/fullcalendar.css' rel='stylesheet' />
+<link href='../fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='../lib/jquery.min.js'></script>
+<script src='../lib/jquery-ui.custom.min.js'></script>
+<script src='../../out/fullcalendar.js'></script>
 <script>
 
 	$(document).ready(function() {
@@ -19,53 +19,75 @@
 			header: {
 				left: 'prev,next today',
 				center: 'title',
-				right: 'month,agendaWeek,agendaDay'
+				right: 'month,agendaWeek,agendaDay,resourceDay'
 			},
 			editable: true,
+			resources: [
+				{
+					id: 1,
+					name: 'Resource 1'
+				},
+				{
+					id: 2,
+					name: 'Resource 2'
+				},
+				{
+					id: 3,
+					name: 'Resource 3'
+				}
+			],
 			events: [
 				{
-					title: 'All Day Event',
-					start: new Date(y, m, 1)
+					title: 'All Day Event (3)',
+					start: new Date(y, m, 1),
+					resourceId: 3
 				},
 				{
-					title: 'Long Event',
+					title: 'Long Event (2)',
 					start: new Date(y, m, d-5),
-					end: new Date(y, m, d-2)
+					end: new Date(y, m, d-2),
+					resourceId: 2
 				},
 				{
 					id: 999,
-					title: 'Repeating Event',
+					title: 'Repeating Event (1)',
 					start: new Date(y, m, d-3, 16, 0),
-					allDay: false
+					allDay: false,
+					resourceId: 1
 				},
 				{
 					id: 999,
-					title: 'Repeating Event',
+					title: 'Repeating Event (1)',
 					start: new Date(y, m, d+4, 16, 0),
-					allDay: false
+					allDay: false,
+					resourceId: 1
 				},
 				{
-					title: 'Meeting',
+					title: 'Meeting (2)',
 					start: new Date(y, m, d, 10, 30),
-					allDay: false
+					allDay: false,
+					resourceId: 2
 				},
 				{
-					title: 'Lunch',
+					title: 'Lunch (3)',
 					start: new Date(y, m, d, 12, 0),
 					end: new Date(y, m, d, 14, 0),
-					allDay: false
+					allDay: false,
+					resourceId: 3
 				},
 				{
-					title: 'Birthday Party',
+					title: 'Birthday Party (1)',
 					start: new Date(y, m, d+1, 19, 0),
 					end: new Date(y, m, d+1, 22, 30),
-					allDay: false
+					allDay: false,
+					resourceId: 1
 				},
 				{
-					title: 'Click for Google',
+					title: 'Click for Google (2)',
 					start: new Date(y, m, 28),
 					end: new Date(y, m, 29),
-					url: 'http://google.com/'
+					url: 'http://google.com/',
+					resourceId: 2
 				}
 			]
 		});
