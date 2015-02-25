@@ -1,7 +1,7 @@
 
 //BUG: unselect needs to be triggered when events are dragged+dropped
 
-function SelectionManager() {
+function ResourceSelectionManager() {
 	var t = this;
 	
 	
@@ -58,9 +58,9 @@ function SelectionManager() {
 	}
 	
 	
-	function reportSelection(startDate, endDate, allDay, ev) {
+	function reportSelection(startDate, endDate, allDay, ev, resource) {
 		selected = true;
-		trigger('select', null, startDate, endDate, allDay, ev, null);
+		trigger('select', null, startDate, endDate, allDay, ev, resource);
 	}
 	
 	
@@ -73,11 +73,13 @@ function SelectionManager() {
 			unselect(ev);
 			var _mousedownElement = this;
 			var dates;
+			var resource;
 			hoverListener.start(function(cell, origCell) { // TODO: maybe put cellToDate/getIsCellAllDay info in cell
 				clearSelection();
-				if (cell && getIsCellAllDay(cell)) {
-					dates = [ cellToDate(origCell), cellToDate(cell) ].sort(dateCompare);
-					renderSelection(dates[0], dates[1], true);
+				if (cell && cell.col == origCell.col && getIsCellAllDay(cell)) {
+					dates = [ t.visStart, t.visStart ].sort(dateCompare);
+					renderSelection(cellToDate(origCell), cellToDate(cell), true);
+					resource = opt('resources')[cell.col];
 				}else{
 					dates = null;
 				}
@@ -88,7 +90,7 @@ function SelectionManager() {
 					if (+dates[0] == +dates[1]) {
 						reportDayClick(dates[0], true, ev);
 					}
-					reportSelection(dates[0], dates[1], true, ev);
+					reportSelection(dates[0], dates[1], true, ev, resource);
 				}
 			});
 		}

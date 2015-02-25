@@ -33,6 +33,7 @@
 		"src/resource/ResourceDayEventRenderer.js",
 		"src/resource/ResourceEventRenderer.js",
 		"src/resource/ResourceView.js",
+		"src/resource/ResourceSelectionManager.js",
         "src/common/View.js",
         "src/common/DayEventRenderer.js",
         "src/common/SelectionManager.js",

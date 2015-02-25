@@ -54,6 +54,7 @@ function ResourceView(element, calendar, viewName) {
 	t.getSnapMinutes = function() { return snapMinutes };
 	t.defaultSelectionEnd = defaultSelectionEnd;
 	t.renderDayOverlay = renderDayOverlay;
+	t.renderCellOverlay = renderCellOverlay;
 	t.renderSelection = renderSelection;
 	t.clearSelection = clearSelection;
 	t.reportDayClick = reportDayClick; // selection mousedown hack
@@ -64,7 +65,7 @@ function ResourceView(element, calendar, viewName) {
 	// imports
 	View.call(t, element, calendar, viewName);
 	OverlayManager.call(t);
-	SelectionManager.call(t);
+	ResourceSelectionManager.call(t);
 	ResourceEventRenderer.call(t);
 	var opt = t.opt;
 	var trigger = t.trigger;
@@ -389,7 +390,8 @@ function ResourceView(element, calendar, viewName) {
 				'fc-' + dayIDs[date.getDay()],
 				contentClass
 			];
-			if (+date == +today) {
+
+			if (+t.visStart == +today) {
 				classNames.push(
 					tm + '-state-highlight',
 					'fc-today'
@@ -763,8 +765,9 @@ function ResourceView(element, calendar, viewName) {
 	}
 
 
-	function realCellToDate(cell) { // ugh "real" ... but blame it on our abuse of the "cell" system
-		var d = cellToDate(0, cell.col);
+	function realCellToDate(cell, col) { // ugh "real" ... but blame it on our abuse of the "cell" system
+		col = (col === undefined ? cell.col : col);
+		var d = cellToDate(0, col);
 		var slotIndex = cell.row;
 		if (opt('allDaySlot')) {
 			slotIndex--;
@@ -904,18 +907,20 @@ function ResourceView(element, calendar, viewName) {
 		if (ev.which == 1 && opt('selectable')) { // ev.which==1 means left mouse button
 			unselect(ev);
 			var dates;
+			var resource;
 			hoverListener.start(function(cell, origCell) {
 				clearSelection();
 				if (cell && cell.col == origCell.col && !getIsCellAllDay(cell)) {
-					var d1 = realCellToDate(origCell);
-					var d2 = realCellToDate(cell);
+					var d1 = realCellToDate(origCell, 0);
+					var d2 = realCellToDate(cell, 0);
 					dates = [
 						d1,
 						addMinutes(cloneDate(d1), snapMinutes), // calculate minutes depending on selection slot minutes 
 						d2,
 						addMinutes(cloneDate(d2), snapMinutes)
 					].sort(dateCompare);
-					renderSlotSelection(dates[0], dates[3]);
+					renderSlotSelection(realCellToDate(origCell), realCellToDate(cell));
+					resource = opt('resources')[cell.col];
 				}else{
 					dates = null;
 				}
@@ -926,7 +931,7 @@ function ResourceView(element, calendar, viewName) {
 					if (+dates[0] == +dates[1]) {
 						reportDayClick(dates[0], false, ev);
 					}
-					reportSelection(dates[0], dates[3], false, ev);
+					reportSelection(dates[0], dates[3], false, ev, resource);
 				}
 			});
 		}
