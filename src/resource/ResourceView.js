@@ -906,7 +906,7 @@ function ResourceView(element, calendar, viewName) {
 	function slotSelectionMousedown(ev) {
 		if (ev.which == 1 && opt('selectable')) { // ev.which==1 means left mouse button
 			unselect(ev);
-			var dates;
+			var dates, dates_for_slot_selection;
 			var resource;
 			hoverListener.start(function(cell, origCell) {
 				clearSelection();
@@ -919,7 +919,14 @@ function ResourceView(element, calendar, viewName) {
 						d2,
 						addMinutes(cloneDate(d2), snapMinutes)
 					].sort(dateCompare);
-					renderSlotSelection(realCellToDate(origCell), realCellToDate(cell));
+
+					dates_for_slot_selection = [
+						realCellToDate(origCell),
+						addMinutes(realCellToDate(origCell), snapMinutes), // calculate minutes depending on selection slot minutes
+						realCellToDate(cell),
+						addMinutes(realCellToDate(cell), snapMinutes)
+					].sort(dateCompare);
+					renderSlotSelection(dates_for_slot_selection[0], dates_for_slot_selection[3]);
 					resource = opt('resources')[cell.col];
 				}else{
 					dates = null;
