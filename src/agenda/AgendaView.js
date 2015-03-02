@@ -633,59 +633,62 @@ function AgendaView(element, calendar, viewName) {
 		for (var i=0; i < annotations.length; i++) {
 			var ann = annotations[i];
 
-			if(t instanceof AgendaWeekView) {
+			if(!ann.resourceId) {
 
-				var dayIndex = dayIndexes[ann.start.getDay()];
-			}
-			else if(t instanceof AgendaDayView) {
-				if(ann.start.getDay() != t.visStart.getDay()) {
+				if(t instanceof AgendaWeekView) {
+
+					var dayIndex = dayIndexes[ann.start.getDay()];
+				}
+				else if(t instanceof AgendaDayView) {
+					if(ann.start.getDay() != t.visStart.getDay()) {
+						continue;
+					}
+					var dayIndex = 0;
+				}
+				else {
+					return;
+				}
+
+				if(dayIndex === undefined) {
 					continue;
 				}
-				var dayIndex = 0;
+
+				var top = timePosition(ann.start, ann.start);
+				var bottom = timePosition(ann.end, ann.end);
+				var height = bottom - top;
+
+				var left = colContentLeft(dayIndex) - 2;
+				var right = colContentRight(dayIndex) + 3;
+				var width = right - left - 1;
+
+				var cls = '';
+				if (ann.cls) {
+					cls = ' ' + ann.cls;
+				}
+
+				if(today >= t.visStart && today < t.visEnd && today == new Date(ann.start).setHours(0,0,0,0)) {
+					cls += ' fc-annotation-today';
+				}
+
+				var colors = '';
+				if (ann.color) {
+					colors = 'color:' + ann.color + ';';
+				}
+				if (ann.background) {
+					colors += 'background:' + ann.background + ';';
+				}
+
+				var body = ann.title || '';
+
+				html += '<div style="position: absolute; ' +
+					'top: ' + top + 'px; ' +
+					'left: ' + left + 'px; ' +
+					'width: ' + width + 'px; ' +
+					'height: ' + height + 'px;' + colors + '" ' +
+					'class="fc-annotation fc-annotation-skin' + cls + '">' +
+					body +
+					'</div>';
 			}
-			else {
-				return;
-			}
-
-			if(dayIndex === undefined) {
-				continue;
-			}
-
-			var top = timePosition(ann.start, ann.start);
-			var bottom = timePosition(ann.end, ann.end);
-			var height = bottom - top;
-
-			var left = colContentLeft(dayIndex) - 2;
-			var right = colContentRight(dayIndex) + 3;
-			var width = right - left - 1;
-
-			var cls = '';
-			if (ann.cls) {
-				cls = ' ' + ann.cls;
-			}
-
-			if(today >= t.visStart && today < t.visEnd && today == new Date(ann.start).setHours(0,0,0,0)) {
-				cls += ' fc-annotation-today';
-			}
-
-			var colors = '';
-			if (ann.color) {
-				colors = 'color:' + ann.color + ';';
-			}
-			if (ann.background) {
-				colors += 'background:' + ann.background + ';';
-			}
-
-			var body = ann.title || '';
-
-			html += '<div style="position: absolute; ' +
-				'top: ' + top + 'px; ' +
-				'left: ' + left + 'px; ' +
-				'width: ' + width + 'px; ' +
-				'height: ' + height + 'px;' + colors + '" ' +
-				'class="fc-annotation fc-annotation-skin' + cls + '">' +
-				body +
-				'</div>';
 		}
 
 		annotationSegmentContainer[0].innerHTML = html;

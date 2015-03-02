@@ -627,67 +627,56 @@ function ResourceView(element, calendar, viewName) {
 		var html = '';
 		var today = new Date().setHours(0,0,0,0);
 
-//		if(annotations.length > 0 && t instanceof ResourceWeekView) {
-//			var dayIndexes = {};
-//			for (var i=0; i < colCnt; i++) {
-//				dayIndexes[cellToDate(0, i).getDay()] = i;
-//			}
-//		}
-
 		for (var i=0; i < annotations.length; i++) {
 			var ann = annotations[i];
 
-//			if(t instanceof ResourceWeekView) {
-//
-//				var dayIndex = dayIndexes[ann.start.getDay()];
-//			}
-//			else if(t instanceof ResourceDayView) {
-			if(t instanceof ResourceDayView) {
-				if(ann.start.getDay() != t.visStart.getDay()) {
-					continue;
-				}
-			}
-			else {
-				return;
+			if(!ann.resourceId || ann.start.getDay() != t.visStart.getDay()) {
+				continue;
 			}
 
-			for (var dayIndex=0; dayIndex < t.getColCnt(); dayIndex++) {
-				var top = timePosition(ann.start, ann.start);
-				var bottom = timePosition(ann.end, ann.end);
-				var height = bottom - top;
+			//var dayIndex = t.visStart.getDay();
 
-				var left = colContentLeft(dayIndex) - 2;
-				var right = colContentRight(dayIndex) + 3;
-				var width = right - left - 1;
+			var top = timePosition(ann.start, ann.start);
+			var bottom = timePosition(ann.end, ann.end);
+			var height = bottom - top;
 
-				var cls = '';
-				if (ann.cls) {
-					cls = ' ' + ann.cls;
+			var resourceIndex = 0;
+			for(var j=0; j < opt('resources').length; j++) {
+				if(opt('resources')[j].id == ann.resourceId) {
+					resourceIndex = j;
 				}
-
-				if(today >= t.visStart && today < t.visEnd && today == new Date(ann.start).setHours(0,0,0,0)) {
-					cls += ' fc-annotation-today';
-				}
-
-				var colors = '';
-				if (ann.color) {
-					colors = 'color:' + ann.color + ';';
-				}
-				if (ann.background) {
-					colors += 'background:' + ann.background + ';';
-				}
-
-				var body = ann.title || '';
-
-				html += '<div style="position: absolute; ' +
-					'top: ' + top + 'px; ' +
-					'left: ' + left + 'px; ' +
-					'width: ' + width + 'px; ' +
-					'height: ' + height + 'px;' + colors + '" ' +
-					'class="fc-annotation fc-annotation-skin' + cls + '">' +
-					body +
-					'</div>';
 			}
+			var left = colContentLeft(resourceIndex) - 2;
+			var right = colContentRight(resourceIndex) + 3;
+			var width = right - left - 1;
+
+			var cls = '';
+			if (ann.cls) {
+				cls = ' ' + ann.cls;
+			}
+
+			if(today >= t.visStart && today < t.visEnd && today == new Date(ann.start).setHours(0,0,0,0)) {
+				cls += ' fc-annotation-today';
+			}
+
+			var colors = '';
+			if (ann.color) {
+				colors = 'color:' + ann.color + ';';
+			}
+			if (ann.background) {
+				colors += 'background:' + ann.background + ';';
+			}
+
+			var body = ann.title || '';
+
+			html += '<div style="position: absolute; ' +
+				'top: ' + top + 'px; ' +
+				'left: ' + left + 'px; ' +
+				'width: ' + width + 'px; ' +
+				'height: ' + height + 'px;' + colors + '" ' +
+				'class="fc-annotation fc-annotation-skin' + cls + '">' +
+				body +
+				'</div>';
 		}
 
 		annotationSegmentContainer[0].innerHTML = html;
