@@ -140,8 +140,7 @@ function ResourceView(element, calendar, viewName) {
 	disableTextSelection(element.addClass('fc-agenda'));
 	
 	
-	function renderResource(c) {
-		colCnt = c;
+	function renderResource() {
 		updateOptions();
 
 		if (!dayTable) { // first time rendering?
@@ -160,6 +159,7 @@ function ResourceView(element, calendar, viewName) {
 		minMinute = parseTime(opt('minTime'));
 		maxMinute = parseTime(opt('maxTime'));
 		colFormat = opt('columnFormat');
+		colCnt = opt('resources').length;
 
 		// week # options. (TODO: bad, logic also in other views)
 		showWeekNumbers = opt('weekNumbers');

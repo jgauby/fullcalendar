@@ -28,6 +28,7 @@ function Calendar(element, options, eventSources) {
 	t.getView = getView;
 	t.option = option;
 	t.trigger = trigger;
+	t.updateResources = updateResources;
 	
 	
 	// imports
@@ -51,7 +52,15 @@ function Calendar(element, options, eventSources) {
 	var events = [];
 	var annotations = t.options.annotations;
 	var _dragElement;
-	
+
+	/* Main Rendering
+	 -----------------------------------------------------------------------------*/
+	function updateResources(resources) {
+		options.resources = resources;
+		if(currentView.name == "resourceDay") {
+			_renderView();
+		}
+	}
 	
 	
 	/* Main Rendering

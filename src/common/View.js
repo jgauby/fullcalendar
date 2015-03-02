@@ -577,23 +577,25 @@ function View(element, calendar, viewName) {
 					}
 				}
 
-				// view might be RTL, so order by leftmost column
-				var cols = [ segmentCellFirst.col, segmentCellLast.col ].sort();
+				if(segmentCellFirst && segmentCellLast) { // resource is displayed ?
+					// view might be RTL, so order by leftmost column
+					var cols = [ segmentCellFirst.col, segmentCellLast.col ].sort();
 
-				// Determine if segment's first/last cell is the beginning/end of the date range.
-				// We need to compare "day offset" because "cell offsets" are often ambiguous and
-				// can translate to multiple days, and an edge case reveals itself when we the
-				// range's first cell is hidden (we don't want isStart to be true).
-				var isStart = cellOffsetToDayOffset(segmentCellOffsetFirst) == rangeDayOffsetStart;
-				var isEnd = cellOffsetToDayOffset(segmentCellOffsetLast) + 1 == rangeDayOffsetEnd; // +1 for comparing exclusively
+					// Determine if segment's first/last cell is the beginning/end of the date range.
+					// We need to compare "day offset" because "cell offsets" are often ambiguous and
+					// can translate to multiple days, and an edge case reveals itself when we the
+					// range's first cell is hidden (we don't want isStart to be true).
+					var isStart = cellOffsetToDayOffset(segmentCellOffsetFirst) == rangeDayOffsetStart;
+					var isEnd = cellOffsetToDayOffset(segmentCellOffsetLast) + 1 == rangeDayOffsetEnd; // +1 for comparing exclusively
 
-				segments.push({
-					row: row,
-					leftCol: cols[0],
-					rightCol: cols[1],
-					isStart: isStart,
-					isEnd: isEnd
-				});
+					segments.push({
+						row: row,
+						leftCol: cols[0],
+						rightCol: cols[1],
+						isStart: isStart,
+						isEnd: isEnd
+					});
+				}
 			}
 		}
 
