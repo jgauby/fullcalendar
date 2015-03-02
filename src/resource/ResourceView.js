@@ -7,10 +7,10 @@ setDefaults({
 	defaultEventMinutes: 120,
 	axisFormat: 'h(:mm)tt',
 	timeFormat: {
-		agenda: 'h:mm{ - h:mm}'
+		resourceDay: 'h:mm{ - h:mm}'
 	},
 	dragOpacity: {
-		agenda: .5
+		resourceDay: .5
 	},
 	minTime: 0,
 	maxTime: 24,
