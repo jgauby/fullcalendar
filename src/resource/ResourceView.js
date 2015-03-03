@@ -640,12 +640,16 @@ function ResourceView(element, calendar, viewName) {
 			var bottom = timePosition(ann.end, ann.end);
 			var height = bottom - top;
 
-			var resourceIndex = 0;
+			var resourceIndex = null;
 			for(var j=0; j < opt('resources').length; j++) {
 				if(opt('resources')[j].id == ann.resourceId) {
 					resourceIndex = j;
 				}
 			}
+			if(resourceIndex === null) { // resource not displayed
+				continue;
+			}
+
 			var left = colContentLeft(resourceIndex) - 2;
 			var right = colContentRight(resourceIndex) + 3;
 			var width = right - left - 1;
