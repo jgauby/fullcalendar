@@ -50,7 +50,6 @@ function Calendar(element, options, eventSources) {
 	var ignoreWindowResize = 0;
 	var date = new Date();
 	var events = [];
-	var annotations = t.options.annotations;
 	var _dragElement;
 
 	/* Main Rendering
@@ -320,7 +319,7 @@ function Calendar(element, options, eventSources) {
 		if (elementVisible()) {
 			currentView.setEventData(events); // for View.js, TODO: unify with renderEvents
 			currentView.renderEvents(events, modifiedEventID); // actually render the DOM elements
-			currentView.renderAnnotations(annotations);
+			currentView.renderAnnotations(t.options.annotations);
 			currentView.trigger('eventAfterAllRender');
 		}
 	}
